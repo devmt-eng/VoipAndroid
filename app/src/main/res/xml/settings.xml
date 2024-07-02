@@ -1,0 +1,107 @@
+<PreferenceScreen
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="Authentication"
+        app:iconSpaceReserved="false">
+
+        <EditTextPreference
+            app:icon="@drawable/ic_user"
+            app:key="username"
+            app:title="Username" />
+
+        <EditTextPreference
+            app:icon="@drawable/ic_password"
+            app:key="password"
+            app:title="Password" />
+
+        <EditTextPreference
+            app:icon="@drawable/ic_domain"
+            app:key="domain"
+            app:title="Domain" />
+        <EditTextPreference
+            app:icon="@drawable/baseline_settings_ethernet_24"
+            app:key="proxy"
+            app:title="Proxy" />
+        <EditTextPreference
+            app:icon="@drawable/baseline_transform_24"
+            app:key="transport"
+            app:title="Transport" />
+
+        <EditTextPreference
+            app:icon="@drawable/ic_port"
+            app:key="port"
+            app:title="Port" />
+
+        <Preference
+            app:key="status"
+            app:title="Authentication Status"
+            app:summary="Not Authenticated">
+        </Preference>
+
+        <Preference
+            app:key="stop"
+            app:title="Stop PIL">
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="VoIPGRID"
+        app:iconSpaceReserved="false"
+        app:summary="To log into the Middleware for incoming calls">
+        <EditTextPreference
+            app:icon="@drawable/ic_user"
+            app:key="voipgrid_username"
+            app:title="Username" />
+
+        <EditTextPreference
+            app:icon="@drawable/ic_password"
+            app:key="voipgrid_password"
+            app:title="Password" />
+
+        <Preference
+            app:key="voipgrid_middleware_token"
+            app:title="Middleware Token"
+            app:summary="None">
+        </Preference>
+
+        <Preference
+            app:key="voipgrid_status"
+            app:title="Authentication Status"
+            app:summary="Not Authenticated">
+        </Preference>
+
+        <Preference
+            app:key="voipgrid_middleware_register"
+            app:title="Register with Middleware"
+            app:enabled="false">
+        </Preference>
+
+        <Preference
+            app:key="voipgrid_middleware_unregister"
+            app:title="Unregister with Middleware"
+            app:enabled="false">
+        </Preference>
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:title="Preferences"
+        app:iconSpaceReserved="false">
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_encryption"
+            app:defaultValue="true"
+            app:key="encryption"
+            app:title="Encryption"/>
+        <SwitchPreferenceCompat
+            app:icon="@drawable/ic_ring"
+            app:defaultValue="false"
+            app:key="use_application_provided_ringtone"
+            app:title="Use Application Ringtone"/>
+        <Preference
+            app:key="echo_cancellation_calibration"
+            app:title="Begin Echo Cancellation Calibration"
+            app:enabled="true">
+        </Preference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

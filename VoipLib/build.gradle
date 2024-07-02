@@ -1,0 +1,87 @@
+plugins {
+    alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.jetbrainsKotlinAndroid)
+    id("maven-publish")
+    id("com.palantir.git-version") version("3.0.0")
+}
+
+android {
+    namespace 'io.phone.build.voiplib'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 26
+        multiDexEnabled true
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+
+        /*afterEvaluate {
+            createVersionInformation(defaultConfig)
+        }*/
+    }
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.findByName("release")
+
+                groupId = "com.github.devmt-eng"
+                artifactId = "VoipLib"
+                version = "1.0.0"
+
+            }
+        }
+    }
+}
+
+task androidJavadocs(type: Javadoc){
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all {variant ->
+        owner.classpath += variant.javaCompileProvider.get().classpath
+    }
+    options {
+        memberLevel = JavadocMemberLevel.PROTECTED
+    }
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs){
+    archiveClassifier.set("javadoc")
+    from androidJavadocs.destinationDir
+}
+
+task androidSourceJar(type: Jar){
+    archiveClassifier.set("source")
+    from android.sourceSets.main.java.srcDirs
+}
+
+dependencies {
+    implementation(name: 'linphone-sdk-android-5.2.110', ext: 'aar')
+    implementation libs.retrofit
+    implementation libs.converter.gson
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    testImplementation libs.junit
+    androidTestImplementation libs.androidx.junit
+    androidTestImplementation libs.androidx.espresso.core
+    // Init Local File Name
+    implementation(libs.androidx.media)
+    implementation(libs.gson)
+    implementation(libs.koin.android)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.lifecycle.process)
+}
+
+/*def createVersionInformation(defaultConfig) {
+    def versionDetails = project.ext.versionDetails
+    def version = versionDetails().version
+    def lastTag = versionDetails().lastTag
+    def gitHash = versionDetails().gitHash
+
+    defaultConfig.resValue("string", "voiplib_build_info_version", version.toString())
+    defaultConfig.resValue("string", "voiplib_build_info_tag", lastTag)
+    defaultConfig.resValue("string", "voiplib_build_info_hash", gitHash)
+}*/
