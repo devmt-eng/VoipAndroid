@@ -15,9 +15,45 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
     }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.pro'
+            consumerProguardFiles 'consumer-rules.pro'
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
 }
 
 afterEvaluate {
+    android.libraryVariants.each { variant ->
+        publishing.publications.create(variant.name, MavenPublication) {
+            from components.findByName(variant.name)
+
+            /*artifact androidJavadocsJar
+            artifact androidSourceJar*/
+
+            groupId = 'com.github.devmt-eng'
+            artifactId = 'VoipLib'
+            version = '1.0.8'
+        }
+    }
+}
+
+/*afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
@@ -30,7 +66,29 @@ afterEvaluate {
             }
         }
     }
+}*/
+
+task androidJavadocs(type: Javadoc){
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    android.libraryVariants.all {variant ->
+        owner.classpath += variant.javaCompileProvider.get().classpath
+    }
+    options {
+        memberLevel = JavadocMemberLevel.PROTECTED
+    }
 }
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs){
+    archiveClassifier.set("javadoc")
+    from androidJavadocs.destinationDir
+}
+
+task androidSourceJar(type: Jar){
+    archiveClassifier.set("source")
+    from android.sourceSets.main.java.srcDirs
+}
+
 
 dependencies {
     implementation(name: 'linphone-sdk-android-5.2.110', ext: 'aar')
