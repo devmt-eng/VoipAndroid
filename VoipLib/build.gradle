@@ -24,13 +24,19 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.devmt-eng'
                 artifactId = 'VoipLib'
-                version = '1.0.4'
-            }
-        }
-        repositories {
-            maven {
-                name = 'Jitpack'
-                url = uri('https://jitpack.io')
+                version = '1.0.5'
+
+                pom {
+                    withXml {
+                        def dependenciesNode = asNode().appendNode('dependencies')
+                        configurations.implementation.allDependencies.each { dep ->
+                            def dependencyNode = dependenciesNode.appendNode('dependency')
+                            dependencyNode.appendNode('groupId', dep.group)
+                            dependencyNode.appendNode('artifactId', dep.name)
+                            dependencyNode.appendNode('version', dep.version)
+                        }
+                    }
+                }
             }
         }
     }
