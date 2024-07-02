@@ -25,38 +25,11 @@ afterEvaluate {
 
                 groupId = "com.github.devmt-eng"
                 artifactId = "VoipLib"
-                version = "1.0.2"
+                version = "1.0.3"
 
-                artifact androidJavadocsJar
-                artifact androidSourceJar
             }
         }
     }
-}
-
-task androidJavadocs(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += files(android.getBootClasspath().join(File.pathSeparator))
-    android.libraryVariants.all { variant ->
-        if (variant.buildType.name == 'release') {
-            classpath += variant.javaCompileProvider.get().classpath
-        }
-    }
-    options {
-        encoding = 'UTF-8'
-        memberLevel = JavadocMemberLevel.PROTECTED
-        links("https://developer.android.com/reference/")
-    }
-}
-
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
-    archiveClassifier.set("javadoc")
-    from androidJavadocs.destinationDir
-}
-
-task androidSourceJar(type: Jar) {
-    archiveClassifier.set("source")
-    from android.sourceSets.main.java.srcDirs
 }
 
 dependencies {
