@@ -24,22 +24,9 @@ afterEvaluate {
                 from components.release
                 groupId = 'com.github.devmt-eng'
                 artifactId = 'VoipLib'
-                version = '1.0.6'
+                version = '1.0.7'
 
-                pom {
-                    withXml {
-                        def dependenciesNode = asNode().appendNode('dependencies')
-                        configurations.implementation.allDependencies.each { dep ->
-                            def dependencyNode = dependenciesNode.appendNode('dependency')
-                            dependencyNode.appendNode('groupId', dep.group ?: "")
-                            dependencyNode.appendNode('artifactId', dep.name)
-                            dependencyNode.appendNode('version', dep.version ?: "")
-                            if (dep.group == null || dep.version == null) {
-                                dependencyNode.appendNode('scope', 'runtime')
-                            }
-                        }
-                    }
-                }
+
             }
         }
     }
