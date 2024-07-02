@@ -21,12 +21,16 @@ afterEvaluate {
     publishing {
         publications {
             release(MavenPublication) {
-                from components.findByName("release")
-
-                groupId = "com.github.devmt-eng"
-                artifactId = "VoipLib"
-                version = "1.0.3"
-
+                from components.release
+                groupId = 'com.github.devmt-eng'
+                artifactId = 'VoipLib'
+                version = '1.0.4'
+            }
+        }
+        repositories {
+            maven {
+                name = 'Jitpack'
+                url = uri('https://jitpack.io')
             }
         }
     }
