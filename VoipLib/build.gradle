@@ -14,10 +14,6 @@ android {
         multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
-
-        /*afterEvaluate {
-            createVersionInformation(defaultConfig)
-        }*/
     }
 }
 
@@ -29,17 +25,19 @@ afterEvaluate {
 
                 groupId = "com.github.devmt-eng"
                 artifactId = "VoipLib"
-                version = "1.0.0"
+                version = "1.0.1"
 
+                artifact androidJavadocsJar
+                artifact androidSourceJar
             }
         }
     }
 }
 
-task androidJavadocs(type: Javadoc){
+task androidJavadocs(type: Javadoc) {
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    android.libraryVariants.all {variant ->
+    android.libraryVariants.all { variant ->
         owner.classpath += variant.javaCompileProvider.get().classpath
     }
     options {
@@ -47,12 +45,12 @@ task androidJavadocs(type: Javadoc){
     }
 }
 
-task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs){
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
     archiveClassifier.set("javadoc")
     from androidJavadocs.destinationDir
 }
 
-task androidSourceJar(type: Jar){
+task androidSourceJar(type: Jar) {
     archiveClassifier.set("source")
     from android.sourceSets.main.java.srcDirs
 }
@@ -67,21 +65,9 @@ dependencies {
     testImplementation libs.junit
     androidTestImplementation libs.androidx.junit
     androidTestImplementation libs.androidx.espresso.core
-    // Init Local File Name
     implementation(libs.androidx.media)
     implementation(libs.gson)
     implementation(libs.koin.android)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.process)
 }
-
-/*def createVersionInformation(defaultConfig) {
-    def versionDetails = project.ext.versionDetails
-    def version = versionDetails().version
-    def lastTag = versionDetails().lastTag
-    def gitHash = versionDetails().gitHash
-
-    defaultConfig.resValue("string", "voiplib_build_info_version", version.toString())
-    defaultConfig.resValue("string", "voiplib_build_info_tag", lastTag)
-    defaultConfig.resValue("string", "voiplib_build_info_hash", gitHash)
-}*/
