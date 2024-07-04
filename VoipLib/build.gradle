@@ -39,44 +39,17 @@ android {
 }
 
 afterEvaluate {
-    android.libraryVariants.each { variant ->
+    android.libraryVariants.each {variant ->
         publishing.publications.create(variant.name, MavenPublication) {
             from components.findByName(variant.name)
 
-            /*artifact androidJavadocsJar
-            artifact androidSourceJar*/
-
             groupId = 'com.github.devmt-eng'
             artifactId = 'VoipLib'
-            version = '1.0.9'
+            version = '1.0.10'
 
-            pom.withXml {
-                def dependenciesNode = asNode().appendNode('dependencies')
-                configurations.implementation.allDependencies.each {
-                    def dependencyNode = dependenciesNode.appendNode('dependency')
-                    dependencyNode.appendNode('groupId', it.group)
-                    dependencyNode.appendNode('artifactId', it.name)
-                    dependencyNode.appendNode('version', it.version)
-                }
-            }
         }
     }
 }
-
-/*afterEvaluate {
-    publishing {
-        publications {
-            release(MavenPublication) {
-                from components.release
-                groupId = 'com.github.devmt-eng'
-                artifactId = 'VoipLib'
-                version = '1.0.7'
-
-
-            }
-        }
-    }
-}*/
 
 task androidJavadocs(type: Javadoc){
     source = android.sourceSets.main.java.srcDirs
